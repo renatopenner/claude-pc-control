@@ -1,0 +1,33 @@
+{
+  "name": "pc-control-marketplace",
+  "owner": {
+    "name": "Renato Penner",
+    "url": "https://github.com/renatopenner"
+  },
+  "metadata": {
+    "description": "Controle do PC, do navegador e cofre de credenciais para agentes, com foco em segundo plano."
+  },
+  "plugins": [
+    {
+      "name": "pc-control",
+      "source": "./",
+      "description": "Acesso total ao Windows, a Chrome/Edge e cofre DPAPI por MCP — 42 tools: UI Automation, Win32, SendInput, COM, janelas/processos/serviços/energia, print de janela escondida, clipboard, CDP para navegador, credenciais model-blind, pastas de rede e elevação sem UAC.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Renato Penner"
+      },
+      "category": "automation",
+      "tags": [
+        "windows",
+        "computer-use",
+        "browser",
+        "cdp",
+        "vault",
+        "credentials",
+        "network-shares",
+        "mcp",
+        "background"
+      ]
+    }
+  ]
+}

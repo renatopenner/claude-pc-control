@@ -1,0 +1,9 @@
+# launchers e scripts do PowerShell precisam de CRLF (cmd.exe e parser do PS)
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+# código e docs em LF mesmo no Windows
+*.py  text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.png binary

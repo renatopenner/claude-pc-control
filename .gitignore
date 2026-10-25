@@ -1,0 +1,9 @@
+# dados de execução do motor e do plugin
+__pycache__/
+*.pyc
+dist/
+*.log
+
+# saída local (nunca commitar: pode conter print de tela e caminho de usuário)
+shots/
+out/

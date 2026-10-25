@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Fixture pc-control</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    #log { margin-top: 12px; padding: 8px; background: #f2f2f2; min-height: 24px; }
+  </style>
+</head>
+<body>
+  <h1 id="title">Ola Claude</h1>
+  <input id="q" placeholder="busca">
+  <button id="b" onclick="document.getElementById('out').innerText='clicou:' + document.getElementById('q').value">Enviar</button>
+  <button id="slow">Devagar</button>
+  <div id="out">vazio</div>
+  <div id="log"></div>
+  <script>
+    document.getElementById('slow').addEventListener('click', function () {
+      setTimeout(function () {
+        document.getElementById('log').innerText = 'pronto depois de 1s';
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

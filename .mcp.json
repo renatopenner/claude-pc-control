@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "pc": {
+      "command": "cmd",
+      "args": ["/c", "${CLAUDE_PLUGIN_ROOT}\\engine\\launch.cmd"],
+      "env": {
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONUTF8": "1"
+      }
+    },
+    "browser": {
+      "command": "cmd",
+      "args": ["/c", "${CLAUDE_PLUGIN_ROOT}\\browser\\launch.cmd"],
+      "env": {
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONUTF8": "1"
+      }
+    },
+    "vault": {
+      "command": "cmd",
+      "args": ["/c", "${CLAUDE_PLUGIN_ROOT}\\vault\\launch.cmd"],
+      "env": {
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONUTF8": "1"
+      }
+    }
+  }
+}

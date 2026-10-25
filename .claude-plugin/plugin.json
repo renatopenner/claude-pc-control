@@ -1,0 +1,29 @@
+{
+  "name": "pc-control",
+  "displayName": "PC Control (background-first)",
+  "version": "1.0.0",
+  "description": "Acesso total ao Windows, ao navegador e às suas credenciais, em segundo plano: 42 tools MCP — UI Automation, Win32, SendInput, COM, janelas/processos/serviços/energia, print de janela escondida, clipboard; Chrome e Edge por CDP (abas, JS, clique, digitação, print); cofre DPAPI model-blind, pastas de rede e elevação sem UAC. Cursor parado e foco preservado; primeiro plano só quando muito necessário.",
+  "author": {
+    "name": "Renato Penner",
+    "url": "https://github.com/renatopenner"
+  },
+  "homepage": "https://github.com/renatopenner/claude-pc-control",
+  "repository": "https://github.com/renatopenner/claude-pc-control",
+  "license": "MIT",
+  "keywords": [
+    "windows",
+    "computer-use",
+    "automation",
+    "uiautomation",
+    "cdp",
+    "chrome",
+    "edge",
+    "vault",
+    "credentials",
+    "network-shares",
+    "elevation",
+    "background",
+    "mcp"
+  ],
+  "defaultEnabled": true
+}

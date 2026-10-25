@@ -510,6 +510,19 @@ def tool_launch(args: dict) -> str:
             note="este perfil já está com a porta de debug aberta — nada foi iniciado",
         )
 
+    # Alguma instância já atende CDP (do agente ou do próprio usuário)? então o
+    # trabalho do launch já está feito — anexar é melhor que abrir outra janela.
+    existing = _resolve_port(name)
+    if existing:
+        return ok(
+            already_running=True,
+            browser=name,
+            port=existing,
+            profile=profile,
+            browser_version=(cdp.version(existing) or {}).get("Browser"),
+            note=f"porta de debug {existing} já está aberta — nada foi iniciado; use browser_tabs",
+        )
+
     if profile == "user" and _running(BROWSERS[name]["process"]):
         raise ToolError(
             f"{name} está em execução com o seu perfil; ele ignora --remote-debugging-port. "
@@ -581,6 +594,17 @@ def tool_launch(args: dict) -> str:
         time.sleep(0.3)
 
     if actual is None:
+        # o navegador pode ter encaminhado para uma instância já existente (mesmo
+        # perfil) — se ela responde CDP, isso não é falha
+        recovered = _resolve_port(name)
+        if recovered:
+            return ok(
+                already_running=True,
+                browser=name,
+                port=recovered,
+                profile=profile,
+                note="havia instância com este perfil; anexei na porta que já respondia",
+            )
         raise ToolError(
             f"{name} iniciou (pid {proc.pid}) mas a porta de debug não abriu. "
             f"Pode haver uma instância anterior presa nesse perfil ({user_data}) — "
@@ -635,7 +659,11 @@ def tool_open(args: dict) -> str:
     name = _name(args.get("browser"))
     port = _require_debug(name)
     url = args.get("url") or "about:blank"
+    prev_fg = _fg_window()
     target = cdp.open_tab(port, url)
+    # abrir aba numa instância existente ativa a janela do navegador; devolve o foco
+    time.sleep(0.25)
+    focus_restored = _set_fg_window(prev_fg)
     _remember_tab(name, target)
     timeout = float(args.get("timeout_s") or 20)
     deadline = time.time() + timeout
@@ -649,7 +677,15 @@ def tool_open(args: dict) -> str:
             except cdp.CDPError:
                 pass
         time.sleep(0.2)
-    return ok(browser=name, tab_id=target.get("id"), short_id=(target.get("id") or "")[:8], url=url, title=title)
+    return ok(
+        browser=name,
+        tab_id=target.get("id"),
+        short_id=(target.get("id") or "")[:8],
+        url=url,
+        title=title,
+        focus_restored=focus_restored,
+        foreground_used=False,
+    )
 
 
 def tool_navigate(args: dict) -> str:
@@ -959,15 +995,18 @@ def tool_close(args: dict) -> str:
     name = _name(args.get("browser"))
     port = _require_debug(name)
     target = _pick_tab(name, args.get("tab"))
+    prev_fg = _fg_window()
     if not cdp.close_tab(port, target.get("id")):
         raise ToolError("não consegui fechar a aba (ela pode ter sido fechada antes)")
+    time.sleep(0.2)
+    focus_restored = _set_fg_window(prev_fg)
     st = state()
     last = (st.get("last") or {}).get(name) or {}
     if last.get("id") == target.get("id"):
         remaining = cdp.pages(port) if cdp.port_open(port) else []
         st.setdefault("last", {})[name] = ({"id": remaining[0].get("id")} if remaining else {})
         _write_json(STATE_FILE, st)
-    return ok(closed=True, closed_tab={"id": target.get("id"), "url": target.get("url")}, foreground_used=False)
+    return ok(closed=True, closed_tab={"id": target.get("id"), "url": target.get("url")}, focus_restored=focus_restored, foreground_used=False)
 
 
 def tool_activate(args: dict) -> str:
